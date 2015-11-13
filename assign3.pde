@@ -1,4 +1,9 @@
 
+//State
+final int START = 0;
+final int PLAY  = 1;
+int NowState = START;
+
 //Player
 float PlayerX;
 float PlayerY;
@@ -25,6 +30,8 @@ float TreasureX = 0;
 float TreasureY = 0;
 
 //Picture
+PImage start1;
+PImage start2;
 PImage bg1;
 PImage bg2;
 PImage fighter;
@@ -35,6 +42,8 @@ PImage treasure;
 void setup () 
 {
   //Picture Load
+  start1    = loadImage("img/start1.png");
+  start2    = loadImage("img/start2.png");
   bg1       = loadImage("img/bg1.png");
   bg2       = loadImage("img/bg2.png");
   fighter   = loadImage("img/fighter.png");
@@ -42,16 +51,36 @@ void setup ()
   hp        = loadImage("img/hp.png");
   treasure  = loadImage("img/treasure.png");
   size(640, 480) ;
-  BGX2 = BGX2-width;
-  PlayerX = width-50;
-  PlayerY = height/2;
-  TreasureX = random(width-50);
-  TreasureY = random(height-50);
 }
 
 void draw() 
 {
-  
+   switch (NowState)
+  {
+    case START:
+      if(mouseX>205 && mouseX<460 && mouseY>375 && mouseY<415)
+      {
+        image(start1,0,0);
+        if(mousePressed)            
+        {
+          //Reset Player location 
+          PlayerX = width - 50;
+          PlayerY = height/2;
+          
+          //Reset Background location
+          BGX2 = BGX2-width;          
+          
+          //Reset Treasure location
+          TreasureX = random(width-50);
+          TreasureY = random(height-50);
+          
+          NowState = PLAY;
+        }
+      }
+      else
+        image(start2,0,0);
+      break;
+    case PLAY:
       //Background 
       image(bg1,BGX1,0);
       image(bg2,BGX2,0);
@@ -154,6 +183,7 @@ void draw()
           TreasureY = random(height-50);
         }    
       }
+   }
 }
 void keyPressed()
 {
